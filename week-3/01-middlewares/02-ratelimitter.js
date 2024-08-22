@@ -1,5 +1,5 @@
-const request = require('supertest');
-const assert = require('assert');
+// const request = require('supertest');
+// const assert = require('assert');
 const express = require('express');
 const app = express();
 // You have been given an express server which has a few endpoints.
@@ -11,8 +11,29 @@ const app = express();
 // You have been given a numberOfRequestsForUser object to start off with which
 // clears every one second
 
+app.use("/user", function(req, res, next){
+    const userId = req.headers['user-id'];
+
+    if(!numberOfRequestsForUser[userId])
+    {
+    numberOfRequestsForUser[userId]=0;
+    }
+
+numberOfRequestsForUser++;
+
+if(numberOfRequestsForUser[userId]>5)
+    {
+        return res.status(404).json({ msg: "slow down mf" });
+    }
+
+    else{
+        next();
+    }
+});
+
+
 let numberOfRequestsForUser = {};
-setInterval(() => {
+setInterval(function() {
     numberOfRequestsForUser = {};
 }, 1000)
 
@@ -24,4 +45,8 @@ app.post('/user', function(req, res) {
   res.status(200).json({ msg: 'created dummy user' });
 });
 
-module.exports = app;
+// module.exports = app;
+const PORT = 3000;
+app.listen(PORT, function(){
+    console.log(`App is running on port ${PORT}`)
+})

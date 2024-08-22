@@ -1,5 +1,5 @@
-const request = require('supertest');
-const assert = require('assert');
+// const request = require('supertest');
+// const assert = require('assert');
 const express = require('express');
 
 const app = express();
@@ -23,4 +23,24 @@ app.get('/errorCount', function(req, res) {
   res.status(200).json({ errorCount });
 });
 
-module.exports = app;
+
+app.use(function(err, req, res, next){
+    res.status(404).json({err:"Not found"});
+    const errorCount = parseInt(req.params.errorCount);
+    if(!errorCount){
+        errorCount=0;
+    }
+    errorCount++
+    if(errorCount>0){
+        console.log(errorCount);
+    }
+    else{
+        next();
+    }
+});
+
+// module.exports = app;
+const PORT = 3000;
+app.listen(PORT, function(){
+    console.log(`server is running on port ${PORT}`);
+})
