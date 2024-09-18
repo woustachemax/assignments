@@ -23,7 +23,7 @@ router.post('/signup', async(req, res) => {
     res.json({msg: 'Admin created successfully'});
 });
 
-router.post('/courses', adminMiddleware, (req, res) => {
+router.post('/courses', adminMiddleware, async(req, res) => {
     // Implement course creation logic
 
     const username = req.headers.username;
@@ -33,7 +33,7 @@ router.post('/courses', adminMiddleware, (req, res) => {
     const price = parseFloat(req.body.price);
     const imageLink = req.body.imageLink;
 
-    const nayacourse= new Course({
+    const nayacourse= await new Course({
         username: username,
         password: password,
         title: title,
