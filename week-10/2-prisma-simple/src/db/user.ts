@@ -12,8 +12,16 @@ const prisma = new PrismaClient();
  *   name: string
  * }
  */
-export async function createUser(username: string, password: string, name: string) {
-    
+export const createUser = async (username: string, password: string, name: string) =>{
+    const res = await prisma.user.create({
+        data: {
+            username,
+            password,
+            name
+        }
+    })
+
+    return res;
 }
 
 /*
@@ -24,6 +32,9 @@ export async function createUser(username: string, password: string, name: strin
  *   name: string
  * }
  */
-export async function getUser(userId: number) {
+export const getUser =  async (userId: number)=>{
+    const res = await prisma.user.findUnique({ where:{id: userId}   
+    })
+    return res
     
 }

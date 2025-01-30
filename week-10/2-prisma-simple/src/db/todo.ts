@@ -12,8 +12,17 @@ const prisma = new PrismaClient();
  *  id: number
  * }
  */
-export async function createTodo(userId: number, title: string, description: string) {
-    
+export const createTodo =  async (userId: number, title: string, description: string)=> {
+    const res = await prisma.todo.create({
+        data: {
+            userId,
+            title,
+            description,
+            done: false,
+         }
+    })
+
+    return(res)
 }
 /*
  * mark done as true for this specific todo.
@@ -25,8 +34,14 @@ export async function createTodo(userId: number, title: string, description: str
  *  id: number
  * }
  */
-export async function updateTodo(todoId: number) {
-
+export const updateTodo = async(todoId: number)=> {
+    const res = await prisma.todo.update({
+       where: {id: todoId}, 
+       data: {
+        done: true
+       }
+    })
+    return(res)
 }
 
 /*
@@ -39,6 +54,9 @@ export async function updateTodo(todoId: number) {
  *  id: number
  * }]
  */
-export async function getTodos(userId: number) {
-
+export const getTodos =  async(userId: number)=>{
+    const res = await prisma.todo.findMany({
+        where: {userId: userId}
+    })
+    return(res)
 }

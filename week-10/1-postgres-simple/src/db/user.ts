@@ -9,8 +9,14 @@ import { client } from "..";
  *   name: string
  * }
  */
-export async function createUser(username: string, password: string, name: string) {
-    
+export const createUser =  async (username: string, password: string, name: string)=> {
+    await client.connect();
+    const result = await client.query(`
+            INSERT INTO users(
+            username, password, name) VALUES ($1, $2, $3) 
+            RETURNING *
+        `)
+        return result.rows[0]
 }
 
 /*
@@ -21,6 +27,8 @@ export async function createUser(username: string, password: string, name: strin
  *   name: string
  * }
  */
-export async function getUser(userId: number) {
-    
+export const getUser = async (userId: number) =>{
+        await client.connect();
+        const data = await client.query( `
+            SELECT * FROM  USERS where id=$1`, [userId])
 }
